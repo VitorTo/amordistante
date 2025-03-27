@@ -1,6 +1,8 @@
 <template>
-  <div class="h1">
-    QUIZZES
+  <div class="content-page-quizzes">
+    <div class="h1">
+      QUIZZES
+    </div>
   </div>
 </template>
 

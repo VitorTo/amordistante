@@ -87,9 +87,9 @@ export default {
 </script>
 
 <style>
-.profile-timeline {
+/* .profile-timeline {
   margin: 20px;
-}
+} */
 
 .event .title-year {
   color: var(--primary-color);

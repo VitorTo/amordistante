@@ -1,5 +1,5 @@
 <template>
-  <div class="content-actions ps-3">
+  <div class="content-actions">
     <div class="d-flex scrolling-wrapper">
 
       <div

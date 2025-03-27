@@ -92,6 +92,8 @@ DESKTOP
 @media screen and (max-width: 768px) {
   .main-content {
     padding-bottom: 4rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
   }
   .nav-menu {
     display: flex;

@@ -4,7 +4,7 @@
   </div>
   <div v-else class="profile">
     <!-- Header -->
-    <div class="profile-header" :style="{ backgroundImage: `url(${cover})` }">
+    <div class="profile-header mx--1" :style="{ backgroundImage: `url(${cover})` }">
       <div class="profile-avatar">
         <img :src="avatar" alt="Avatar" />
       </div>
@@ -18,7 +18,7 @@
       />
 
       <!-- ACTIONS -->
-      <CardActions />
+      <CardActions class="me--1" />
 
       <!-- TIMELINE -->
       <Timeline :timeline="timeline" />
