@@ -1,35 +1,58 @@
-@import './base.css';
+:root {
+    /* Sua paleta personalizada */
+    --primary-color:    #FF6B81;
+    --primary-color-2: #c75f96;
+    --primary-hover-color:    #ff6b81c0;
+    
+    --secondary-color:  #A29BFE;
+    --secondary-hover-color:  #a29bfec7;
+    
+    --light-color:      #F5F5F5;
+    --white-color: #F5F5F5;
+    
+    --dark-color:       #2C3E50;
+    
+    --bs-black:         var(--dark-color);
+    --bs-white:         var(--light-color);
 
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  font-weight: normal;
+    /* (background e text) */
+    --bs-body-bg:       var(--light-color);
+    --bs-body-color:    var(--dark-color);
+    
+    --border-radius: 1rem;
+    --avatar-profile-size: 120px;
 }
 
-a,
-.green {
-  text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
-  transition: 0.4s;
-  padding: 3px;
+body {
+    background-color: var(--white-color);
 }
 
-@media (hover: hover) {
-  a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
-  }
+.limit-text {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
 }
 
-@media (min-width: 1024px) {
-  body {
-    display: flex;
-    place-items: center;
-  }
-
-  #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
-  }
+.limit-text-line-2 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
 }
+
+
+
+/*
+NORMAL:
+Primária: 💖 Rosa Coral (#FF6B81) – Transmite amor, conexão e calor.
+Secundária: 💜 Lilás Suave (#A29BFE) – Adiciona um tom lúdico e amigável.
+Neutra Clara: 🤍 Cinza Gelo (#F5F5F5) – Mantém a interface limpa e moderna.
+Neutra Escura: 🌑 Grafite (#2C3E50) – Dá contraste e sofisticação.
+Destaque: 🌟 Dourado Pastel (#FFD700) – Para pequenos detalhes e realces.
+
+MODO ESCURO:
+Fundo: Azul Noturno (#1B263B)
+Texto: Branco Suave (#EAEAEA)
+Destaques: Tons de Rosa Coral e Lilás
+*/
