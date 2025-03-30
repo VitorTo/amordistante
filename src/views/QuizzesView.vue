@@ -62,7 +62,7 @@
 <script>
 import CreateQuestionStep from '@/components/features/Quizzes/CreateQuestionStep.vue';
 import ReviewQuizzes from '@/components/features/Quizzes/ReviewQuizzes.vue';
-import { LIMIT_FREE_QUESTION } from '@/utils/consts.js';
+import { LIMIT_FREE_QUESTION, DEFAULT_QUESTION_POINTS } from '@/utils/consts.js';
 
 export default {
   components: {
@@ -122,7 +122,8 @@ export default {
         this.questions.push({
           text: "",
           options: ["", "", "", ""],
-          correctAnswer: null
+          correctAnswer: null,
+          points: DEFAULT_QUESTION_POINTS // Inicializa com a pontuação padrão
         });
       }
     },
@@ -149,7 +150,8 @@ export default {
             this.questions.push({
               text: "",
               options: ["", "", "", ""],
-              correctAnswer: null
+              correctAnswer: null,
+              points: DEFAULT_QUESTION_POINTS // Inicializa com a pontuação padrão
             });
           }
         }
@@ -197,45 +199,10 @@ export default {
       this.questions = [{
         text: "",
         options: ["", "", "", ""],
-        correctAnswer: null
+        correctAnswer: null,
+        points: DEFAULT_QUESTION_POINTS // Inicializa com a pontuação padrão
       }];
     }
   }
 };
 </script>
-
-<style>
-.step-content {
-  padding: 20px;
-  border: 1px solid #eee;
-  border-radius: 5px;
-  margin-top: 20px;
-}
-
-.el-steps.el-steps--horizontal.step-add-grid {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-}
-
-.questao-container, .revisao-container {
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-.alternativas-container {
-  margin-top: 20px;
-  padding: 15px;
-  background-color: #f8f9fa;
-  border-radius: 5px;
-}
-
-.option-number {
-  font-weight: bold;
-  width: 30px;
-}
-
-.accordion-button:not(.collapsed) {
-  background-color: #e7f1ff;
-  color: #0c63e4;
-}
-</style>

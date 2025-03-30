@@ -22,7 +22,7 @@
           :key="index"
           class="mb-3 d-flex align-items-center"
         >
-          <div class="option-number me-2">{{ ['A', 'B', 'C', 'D'][index] }}.</div>
+          <div class="fw-bold me-2">{{ ['A', 'B', 'C', 'D'][index] }}.</div>
           <el-input
             v-model="questionsLocal[currentStep].options[index]"
             placeholder="Digite uma alternativa"
@@ -111,7 +111,7 @@
 </template>
 
 <script>
-import { LIMIT_FREE_QUESTION } from '@/utils/consts.js'
+import { LIMIT_FREE_QUESTION, DEFAULT_QUESTION_POINTS } from '@/utils/consts.js'
 import BtnAddQuestion from './BtnAddQuestion.vue'
 
 export default {
@@ -155,6 +155,12 @@ export default {
   },
   mounted() {
     this.questionsLocal = [...this.questions]
+
+    this.questionsLocal.forEach(question => {
+      if (question.points === undefined) {
+        question.points = DEFAULT_QUESTION_POINTS
+      }
+    })
   },
   methods: {
     focusNextInput(event, nextInputId) {

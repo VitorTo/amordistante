@@ -65,6 +65,7 @@ Texto: Branco Suave (#EAEAEA)
 Destaques: Tons de Rosa Coral e Lilás
 */
 
+/* PERSONALIZED ELEMENT PLUS */
 
 
 /* PERSONALIZED STEP */
@@ -76,7 +77,12 @@ Destaques: Tons de Rosa Coral e Lilás
     color: var(--primary-color);
 }
 
-/* PERSONALIZED ELEMENT PLUS */
+.el-steps.el-steps--horizontal.step-add-grid {
+display: grid;
+grid-template-columns: repeat(5, 1fr);
+}
+
+/* PERSONALIZED RADIO */
 .radio-color-success.el-radio.is-checked .el-radio__inner {
     background: var(--success-color);
     border-color: var(--success-color);
@@ -85,6 +91,7 @@ Destaques: Tons de Rosa Coral e Lilás
     color: var(--success-color);
 }
 
+/* PERSONALIZED BADGE */
 .btn-plus-premium .el-badge__content.is-fixed {
     position: absolute;
     right: calc(1px + var(--el-badge-size) / 2);
@@ -93,6 +100,7 @@ Destaques: Tons de Rosa Coral e Lilás
     z-index: var(--el-index-normal);
 }
 
+/* PERSONALIZED BORDER INPUT AND TEXTAREA  */
 .el-input .el-input__wrapper,
 .el-textarea .el-textarea__inner {
   transition: box-shadow 0.3s ease;
