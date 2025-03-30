@@ -54,6 +54,16 @@
   border-color: var(--secondary-color) !important;
 }
 
+.btn-success {
+  background-color: var(--success-color) !important;
+  border-color: var(--success-color) !important;
+}
+.btn-success:hover,
+.btn-success:focus {
+  background-color: var(--success-hover-color) !important;
+  border-color: var(--success-color) !important;
+}
+
 /* Alerts */
 .alert-primary {
   background-color: var(--primary-color) !important;

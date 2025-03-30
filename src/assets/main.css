@@ -7,6 +7,7 @@
     --secondary-color:  #A29BFE;
     --secondary-hover-color:  #a29bfec7;
     
+    --success-color:    #67C23A;
     --light-color:      #F5F5F5;
     --white-color: #F5F5F5;
     
@@ -63,3 +64,41 @@ Fundo: Azul Noturno (#1B263B)
 Texto: Branco Suave (#EAEAEA)
 Destaques: Tons de Rosa Coral e Lilás
 */
+
+
+
+/* PERSONALIZED STEP */
+.el-step__main .el-step__description {
+    margin-top: 0.25rem;
+}
+.el-step__main .el-step__description.is-process,
+.el-step__head.is-process .el-step__icon.is-text {
+    color: var(--primary-color);
+}
+
+/* PERSONALIZED ELEMENT PLUS */
+.radio-color-success.el-radio.is-checked .el-radio__inner {
+    background: var(--success-color);
+    border-color: var(--success-color);
+}
+.radio-color-success.el-radio.is-checked .el-radio__label {
+    color: var(--success-color);
+}
+
+.btn-plus-premium .el-badge__content.is-fixed {
+    position: absolute;
+    right: calc(1px + var(--el-badge-size) / 2);
+    top: 0px;
+    transform: translateY(-50%) translateX(50%);
+    z-index: var(--el-index-normal);
+}
+
+.el-input .el-input__wrapper,
+.el-textarea .el-textarea__inner {
+  transition: box-shadow 0.3s ease;
+}
+
+.el-input .el-input__wrapper.is-focus,
+.el-textarea .el-textarea__inner.is-focus {
+  box-shadow: 0 0 0 1px var(--primary-color) inset;
+}
