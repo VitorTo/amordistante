@@ -43,86 +43,6 @@
           @ir-para-revisao="irParaRevisao"
         />
 
-
-        <!-- <div v-if="currentStep < questionsCount" class="questao-container">
-          <div class="mb-3">
-            <h3 class="mb-1">Questão {{ currentStep + 1 }}</h3>
-          </div>
-
-          <div class="mb-3">
-            <label class="form-label">Texto da pergunta:</label>
-            <el-input
-              v-model="questions[currentStep].text"
-              type="textarea"
-              placeholder="Digite sua pergunta aqui"
-            />
-          </div>
-
-          <div class="alternativas-container">
-            <div
-              v-for="(option, index) in questions[currentStep].options"
-              :key="index"
-              class="mb-3 d-flex align-items-center"
-            >
-              <div class="option-number me-2">{{ ['A', 'B', 'C', 'D'][index] }}.</div>
-              <el-input
-                v-model="questions[currentStep].options[index]"
-                placeholder="Digite uma alternativa"
-                class="flex-grow-1 me-2"
-              />
-              <el-radio
-                class="radio-color-success"
-                v-model="questions[currentStep].correctAnswer"
-                :value="index"
-                :label="`Correta`"
-              />
-            </div>
-          </div>
-
-          <div class="d-flex justify-content-between mt-4">
-            <div>
-              <button
-                class="btn btn-secondary me-2"
-                @click="prevStep"
-                v-if="currentStep > 0"
-              >
-                <i class="fas fa-arrow-left"></i>
-              </button>
-              <button
-                class="btn btn-success ms-2"
-                @click="irParaRevisao"
-                :disabled="!isCurrentQuestionValid"
-              >
-                Revisar Quiz
-              </button>
-            </div>
-            <div>
-              <button
-                v-if="currentStep < 3"
-                class="btn btn-primary"
-                @click="nextStep"
-                :disabled="!isCurrentQuestionValid"
-              >
-                <i class="fas fa-plus"></i>
-                <span class="ms-2">Adicionar</span>
-              </button>
-              <div
-                v-else-if="currentStep == 3 && !isUserPremium"
-                class="become-premium"
-              >
-                <el-badge value="Premium" class="item btn-plus-premium">
-                  <button
-                    class="btn btn-primary disabled"
-                    :disabled="isUserPremium"
-                  >
-                    <i class="fas fa-plus"></i>
-                  </button>
-                </el-badge>
-              </div>
-            </div>
-          </div>
-        </div> -->
-
         <!-- Etapa de revisão/finalização -->
         <div v-else class="revisao-container">
           <h3 class="mb-3">Revisão do Quiz</h3>
@@ -173,6 +93,7 @@
           <div class="d-flex justify-content-between mt-4">
             <button class="btn btn-secondary" @click="voltarParaUltimaQuestao">
               <i class="fas fa-arrow-left"></i>
+              Voltar
             </button>
             <button class="btn btn-success" @click="salvarQuiz">
               Salvar Quiz

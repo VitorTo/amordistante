@@ -3,7 +3,7 @@
 
   </div>
   <div v-else class="questao-container">
-    <div v-if="!isCurrentQuestionValid && !showInfo" class="question-content">
+    <div v-if="!showInfo" class="question-content">
       <div class="mb-3">
         <h3 class="mb-1">Questão {{ currentStep + 1 }}</h3>
       </div>
@@ -36,19 +36,41 @@
         </div>
       </div>
 
-      <button
-        v-if="canComeBack"
-        class="btn btn-secondary me-2"
-        @click="handlePrevStep"
-      >
-        <i class="fas fa-arrow-left"></i>
-      </button>
+      <div :class="`d-flex ${canComeBack ? 'justify-content-between' : 'justify-content-end'}` ">
+        <button
+          v-if="canComeBack"
+          class="btn btn-secondary me-2"
+          @click="handlePrevStep"
+        >
+          <i class="fas fa-arrow-left"></i>
+          Voltar
+        </button>
+        <button
+          class="btn btn-success"
+          :disabled="!isCurrentQuestionValid"
+          @click="showInfo = true"
+        >
+          <i class="fas fa-check"></i>
+          Concluir Questão
+        </button>
+      </div>
     </div>
     <div v-else class="info-content">
-
-      <!-- MOSTRAR UM RESUMO DO QUE ELA PREENCHEU -->
-      <div>
-        <!-- aqui o resumo -->
+      <div class="questao-resumo mb-4">
+        <h4 class="mb-3">Resumo da Questão {{ currentStep + 1 }}</h4>
+        <div class="pergunta-texto mb-3">
+          <strong>Pergunta:</strong> {{ questionsLocal[currentStep].text }}
+        </div>
+        <div class="opcoes-resumo">
+          <strong>Alternativas:</strong>
+          <div v-for="(option, index) in questionsLocal[currentStep].options" :key="index"
+               class="opcao-item d-flex align-items-center mt-2 p-2"
+               :class="{ 'bg-light-success rounded': index === questionsLocal[currentStep].correctAnswer }">
+            <span class="opcao-letra me-2">{{ ['A', 'B', 'C', 'D'][index] }}.</span>
+            <span>{{ option }}</span>
+            <span v-if="index === questionsLocal[currentStep].correctAnswer" class="badge bg-success ms-auto">Resposta correta</span>
+          </div>
+        </div>
       </div>
 
       <div class="actions-info row gap-2">
@@ -127,29 +149,24 @@ export default {
     allowAddQuestion() {
       return this.currentStep < LIMIT_FREE_QUESTION
     }
-
   },
   mounted() {
     this.questionsLocal = [...this.questions]
   },
   methods: {
     handlePrevStep() {
+      this.showInfo = true
       this.$emit('prev-step');
     },
     handleNextStep() {
       if(this.allowAddQuestion) {
+        this.showInfo = false
         this.$emit('next-step', this.questionsLocal);
       }
     },
     handleIrParaRevisao() {
       this.$emit('ir-para-revisao', this.questionsLocal);
     },
-  },
-  watch: {
-    // AJUSTE ESSA LOGICA
-    isCurrentQuestionValid: function(newVal, oldVal) {
-      this.showInfo = newVal
-    }
   }
 }
 </script>
