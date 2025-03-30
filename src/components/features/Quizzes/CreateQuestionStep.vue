@@ -88,7 +88,7 @@
           <btn-add-question
           class="w-100"
           :show-add-button="allowAddQuestion"
-          :show-premium-button="currentStep == 3 && !isUserPremium"
+          :show-premium-button="!allowAddQuestion"
           :disabled="!isCurrentQuestionValid"
           @click="handleNextStep"
           />
@@ -147,7 +147,7 @@ export default {
       return this.currentStep > 0
     },
     allowAddQuestion() {
-      return this.currentStep < LIMIT_FREE_QUESTION
+      return this.isUserPremium || this.currentStep < LIMIT_FREE_QUESTION - 1
     }
   },
   mounted() {

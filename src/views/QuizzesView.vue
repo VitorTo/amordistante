@@ -22,7 +22,9 @@
 
     <!-- Sistema de etapas para questões -->
     <div v-if="startedCreateQuiz">
-      <el-steps :active="currentStep" finish-status="success" >
+      <el-steps
+        :class="`${transformStepGrid ? 'step-add-grid' : '' }`"
+      :active="currentStep" finish-status="success" >
         <el-step
           v-for="n in totalSteps"
           :key="n"
@@ -60,6 +62,7 @@
 <script>
 import CreateQuestionStep from '@/components/features/Quizzes/CreateQuestionStep.vue';
 import ReviewQuizzes from '@/components/features/Quizzes/ReviewQuizzes.vue';
+import { LIMIT_FREE_QUESTION } from '@/utils/consts.js';
 
 export default {
   components: {
@@ -73,21 +76,6 @@ export default {
       currentStep: 0,
       questionsCount: 1,
       questions: [
-        {
-          text: "",
-          options: ["", "", "", ""],
-          correctAnswer: null
-        },
-        {
-          text: "",
-          options: ["", "", "", ""],
-          correctAnswer: null
-        },
-        {
-          text: "",
-          options: ["", "", "", ""],
-          correctAnswer: null
-        },
         {
           text: "",
           options: ["", "", "", ""],
@@ -110,7 +98,14 @@ export default {
       return this.questionsCount + 1;
     },
     isUserPremium() {
-      return false
+      // Substitua por sua lógica real para verificar usuário premium
+      return true
+    },
+    maxQuestions() {
+      return this.isUserPremium ? Infinity : LIMIT_FREE_QUESTION
+    },
+    transformStepGrid() {
+      return this.questions.length > 5
     }
   },
   methods: {
@@ -118,6 +113,18 @@ export default {
       if (!this.quizTitle.trim()) return;
       this.startedCreateQuiz = true;
       this.currentStep = 0;
+
+      // Inicializar o array de questões com base no limite
+      this.questions = [];
+      const initialQuestionsCount = this.isUserPremium ? 1 : LIMIT_FREE_QUESTION;
+
+      for (let i = 0; i < initialQuestionsCount; i++) {
+        this.questions.push({
+          text: "",
+          options: ["", "", "", ""],
+          correctAnswer: null
+        });
+      }
     },
     loadQuestions(questions) {
       this.questions = questions
@@ -129,12 +136,24 @@ export default {
     },
     nextStep(questions) {
       if (!this.isCurrentQuestionValid) return;
-      this.loadQuestions(questions)
+      this.loadQuestions(questions);
 
-      if (this.currentStep < 3) {
+      // Verificar se podemos adicionar mais questões
+      if (this.currentStep < this.maxQuestions - 1) {
+        // Se estamos na última questão disponível, pode ser necessário adicionar uma nova
         if (this.currentStep === this.questionsCount - 1) {
           this.questionsCount++;
+
+          // Se o array de questões atual não tem espaço suficiente, adicionar mais uma
+          if (this.questionsCount > this.questions.length) {
+            this.questions.push({
+              text: "",
+              options: ["", "", "", ""],
+              correctAnswer: null
+            });
+          }
         }
+
         this.currentStep++;
       }
     },
@@ -175,11 +194,11 @@ export default {
       this.quizTitle = "";
       this.currentStep = 0;
       this.questionsCount = 1;
-      this.questions = this.questions.map(() => ({
+      this.questions = [{
         text: "",
         options: ["", "", "", ""],
         correctAnswer: null
-      }));
+      }];
     }
   }
 };
@@ -191,6 +210,11 @@ export default {
   border: 1px solid #eee;
   border-radius: 5px;
   margin-top: 20px;
+}
+
+.el-steps.el-steps--horizontal.step-add-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
 }
 
 .questao-container, .revisao-container {
