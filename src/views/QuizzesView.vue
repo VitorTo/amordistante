@@ -5,24 +5,31 @@
     </div>
 
     <!-- Título do Quiz (fora do step-by-step) -->
-    <div class="mb-4" v-if="!iniciadoCriacao">
-      <el-input
-        v-model="quizTitle"
-        placeholder="Digite o título do seu quiz"
-        class="mb-3"
-      />
-      <button
-        class="btn btn-primary"
-        @click="iniciarCriacaoQuiz"
-        :disabled="!quizTitle.trim()"
-      >
-        Começar a criar questões
-      </button>
+    <div class="row mb-3" v-if="!startedCreateQuiz">
+      <div class="col-md-3">
+        <el-input
+          v-model="quizTitle"
+          placeholder="DIGITE TÍTULO DO SEU QUIZ"
+          class="mb-3"
+        />
+      </div>
+      <div class="col-md-3">
+        <button
+          class="w-100 btn btn-primary"
+          @click="initQuiz"
+          :disabled="!quizTitle.trim()"
+        >
+          <i class="fas fa-plus"></i>
+          Criar um novo quiz
+        </button>
+      </div>
     </div>
 
     <!-- Sistema de etapas para questões -->
-    <div v-if="iniciadoCriacao">
-      <el-steps :active="currentStep" finish-status="success" >
+    <div v-if="startedCreateQuiz">
+      <el-steps
+        :class="`${transformStepGrid ? 'step-add-grid' : '' }`"
+      :active="currentStep" finish-status="success" >
         <el-step
           v-for="n in totalSteps"
           :key="n"
@@ -40,157 +47,139 @@
           :questions="questions"
           @prev-step="prevStep"
           @next-step="nextStep"
-          @ir-para-revisao="irParaRevisao"
+          @ir-para-revisao="goToReview"
         />
 
-
-        <!-- <div v-if="currentStep < questionsCount" class="questao-container">
-          <div class="mb-3">
-            <h3 class="mb-1">Questão {{ currentStep + 1 }}</h3>
-          </div>
-
-          <div class="mb-3">
-            <label class="form-label">Texto da pergunta:</label>
-            <el-input
-              v-model="questions[currentStep].text"
-              type="textarea"
-              placeholder="Digite sua pergunta aqui"
-            />
-          </div>
-
-          <div class="alternativas-container">
-            <div
-              v-for="(option, index) in questions[currentStep].options"
-              :key="index"
-              class="mb-3 d-flex align-items-center"
-            >
-              <div class="option-number me-2">{{ ['A', 'B', 'C', 'D'][index] }}.</div>
-              <el-input
-                v-model="questions[currentStep].options[index]"
-                placeholder="Digite uma alternativa"
-                class="flex-grow-1 me-2"
-              />
-              <el-radio
-                class="radio-color-success"
-                v-model="questions[currentStep].correctAnswer"
-                :value="index"
-                :label="`Correta`"
-              />
-            </div>
-          </div>
-
-          <div class="d-flex justify-content-between mt-4">
-            <div>
-              <button
-                class="btn btn-secondary me-2"
-                @click="prevStep"
-                v-if="currentStep > 0"
-              >
-                <i class="fas fa-arrow-left"></i>
-              </button>
-              <button
-                class="btn btn-success ms-2"
-                @click="irParaRevisao"
-                :disabled="!isCurrentQuestionValid"
-              >
-                Revisar Quiz
-              </button>
-            </div>
-            <div>
-              <button
-                v-if="currentStep < 3"
-                class="btn btn-primary"
-                @click="nextStep"
-                :disabled="!isCurrentQuestionValid"
-              >
-                <i class="fas fa-plus"></i>
-                <span class="ms-2">Adicionar</span>
-              </button>
-              <div
-                v-else-if="currentStep == 3 && !isUserPremium"
-                class="become-premium"
-              >
-                <el-badge value="Premium" class="item btn-plus-premium">
-                  <button
-                    class="btn btn-primary disabled"
-                    :disabled="isUserPremium"
-                  >
-                    <i class="fas fa-plus"></i>
-                  </button>
-                </el-badge>
-              </div>
-            </div>
-          </div>
-        </div> -->
-
         <!-- Etapa de revisão/finalização -->
-        <div v-else class="revisao-container">
-          <h3 class="mb-3">Revisão do Quiz</h3>
-          <p class="mb-3"><strong>Título:</strong> {{ quizTitle }}</p>
-          <p class="mb-3"><strong>Total de questões:</strong> {{ questionsCount }}</p>
+        <review-quizzes
+          v-if="currentStep >= questionsCount"
+          :quiz-title="quizTitle"
+          :questions-count="questionsCount"
+          :questions="questions"
+          @back-last-question="backLastQuestion"
+          @save-quiz="saveQuiz"
+        />
+      </div>
+    </div>
 
-          <div class="accordion" id="quizAccordion">
-            <div
-              class="accordion-item"
-              v-for="(question, qIndex) in questions.slice(0, questionsCount)"
-              :key="qIndex"
-            >
-              <h2 class="accordion-header">
-                <button
-                  class="accordion-button collapsed"
-                  type="button"
-                  data-bs-toggle="collapse"
-                  :data-bs-target="'#collapse' + qIndex"
-                  aria-expanded="false"
-                  :aria-controls="'collapse' + qIndex"
-                >
-                  Questão {{ qIndex + 1 }}: {{ question.text.substring(0, 50) }}{{ question.text.length > 50 ? '...' : '' }}
-                </button>
-              </h2>
-              <div
-                :id="'collapse' + qIndex"
-                class="accordion-collapse collapse"
-                data-bs-parent="#quizAccordion"
-              >
-                <div class="accordion-body">
-                  <p><strong>Pergunta:</strong> {{ question.text }}</p>
-                  <ul class="list-group">
-                    <li
-                      v-for="(option, oIndex) in question.options"
-                      :key="oIndex"
-                      class="list-group-item"
-                      :class="{'list-group-item-success': oIndex === question.correctAnswer}"
-                    >
-                      {{ ['A', 'B', 'C', 'D'][oIndex] }}. {{ option }}
-                      <span v-if="oIndex === question.correctAnswer" class="badge bg-success ms-2">Correta</span>
-                    </li>
-                  </ul>
+    <!-- Seção de Quizzes -->
+    <div v-if="!startedCreateQuiz" class="quizzes-section mt-5">
+      <!-- Meu último quiz -->
+      <div v-if="lastQuiz" class="last-quiz mb-5">
+        <h3 class="mb-3">Meu último quiz criado</h3>
+        <div class="card quiz-card">
+          <div class="card-body">
+            <h4 class="card-title">{{ lastQuiz.title }}</h4>
+            <p class="card-text">
+              <i class="fas fa-list-ol me-2"></i>
+              {{ lastQuiz.questions.length }} questões
+              <span class="badge bg-info ms-2">{{ lastQuiz.points || sumQuizPoints(lastQuiz) }} pontos</span>
+            </p>
+            <!-- <div class="d-flex justify-content-between">
+              <button class="btn btn-primary" @click="viewQuiz(lastQuiz)">
+                <i class="fas fa-eye me-1"></i> Visualizar
+              </button>
+              <button class="btn btn-warning" @click="editQuiz(lastQuiz)">
+                <i class="fas fa-edit me-1"></i> Editar
+              </button>
+            </div> -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Meus Quizzes -->
+      <div v-if="myQuizzes.length > 1" class="my-quizzes mb-5">
+        <h3 class="mb-3">Meus Outros Quizzes</h3>
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+          <div
+            v-for="(quiz, index) in myOtherQuizzes"
+            :key="`my-${index}`"
+            class="col"
+          >
+            <div class="card h-100 quiz-card">
+              <div class="card-body">
+                <h5 class="card-title">{{ quiz.title }}</h5>
+                <p class="card-text">
+                  <i class="fas fa-list-ol me-2"></i>
+                  {{ quiz.questions.length }} questões
+                  <span class="badge bg-info ms-2">{{ quiz.points || sumQuizPoints(quiz) }} pontos</span>
+                </p>
+                <div class="d-flex justify-content-between">
+                  <button class="btn btn-sm btn-primary" @click="viewQuiz(quiz)">
+                    <i class="fas fa-eye me-1"></i> Visualizar
+                  </button>
+                  <button class="btn btn-sm btn-warning" @click="editQuiz(quiz)">
+                    <i class="fas fa-edit me-1"></i> Editar
+                  </button>
                 </div>
               </div>
             </div>
           </div>
+        </div>
+      </div>
 
-          <div class="d-flex justify-content-between mt-4">
-            <button class="btn btn-secondary" @click="voltarParaUltimaQuestao">
-              <i class="fas fa-arrow-left"></i>
-            </button>
-            <button class="btn btn-success" @click="salvarQuiz">
-              Salvar Quiz
-            </button>
+      <!-- Quizzes de Outros Usuários -->
+      <div v-if="otherUsersQuizzes.length" class="other-quizzes">
+        <h3 class="mb-3">Quizzes criado pelo seu par</h3>
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+          <div
+            v-for="(quiz, index) in otherUsersQuizzes"
+            :key="`other-${index}`"
+            class="col"
+          >
+            <div class="card h-100 quiz-card">
+              <div class="card-body">
+                <h5 class="card-title">{{ quiz.title }}</h5>
+                <p class="card-text">
+                  <i class="fas fa-list-ol me-2"></i>
+                  {{ quiz.questions.length }} questões
+                  <span class="badge bg-info ms-2">{{ quiz.points || sumQuizPoints(quiz) }} pontos</span>
+                </p>
+                <div class="d-flex justify-content-between">
+                  <button class="btn btn-sm btn-primary" @click="viewQuiz(quiz)">
+                    <i class="fas fa-eye me-1"></i> Ver
+                  </button>
+                  <button class="btn btn-sm btn-success" @click="playQuiz(quiz)">
+                    <i class="fas fa-play me-1"></i> Jogar
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
+      </div>
+
+      <!-- Mensagem se não houver quizzes -->
+      <div v-if="!allQuizzes.length" class="no-quizzes text-center py-5">
+        <i class="fas fa-question-circle fa-3x mb-3 text-muted"></i>
+        <h4>Nenhum quiz encontrado</h4>
+        <p class="text-muted">Crie seu primeiro quiz para começar!</p>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { useQuizStore } from '@/stores/quiz';
+import { LIMIT_FREE_QUESTION, DEFAULT_QUESTION_POINTS } from '@/utils/consts.js';
 import CreateQuestionStep from '@/components/features/Quizzes/CreateQuestionStep.vue';
+import ReviewQuizzes from '@/components/features/Quizzes/ReviewQuizzes.vue';
+
 export default {
-  components: { CreateQuestionStep },
+  setup() {
+    const quizStore = useQuizStore()
+    return {
+      quizStore
+    }
+  },
+  components: {
+    CreateQuestionStep,
+    ReviewQuizzes
+  },
   data() {
     return {
-      iniciadoCriacao: false,
+      currentUser: 1,
+      startedCreateQuiz: false,
       quizTitle: "",
       currentStep: 0,
       questionsCount: 1,
@@ -198,24 +187,11 @@ export default {
         {
           text: "",
           options: ["", "", "", ""],
-          correctAnswer: null
-        },
-        {
-          text: "",
-          options: ["", "", "", ""],
-          correctAnswer: null
-        },
-        {
-          text: "",
-          options: ["", "", "", ""],
-          correctAnswer: null
-        },
-        {
-          text: "",
-          options: ["", "", "", ""],
-          correctAnswer: null
+          correctAnswer: null,
+          points: DEFAULT_QUESTION_POINTS
         }
-      ]
+      ],
+      selectedQuiz: null
     };
   },
   computed: {
@@ -232,14 +208,60 @@ export default {
       return this.questionsCount + 1;
     },
     isUserPremium() {
+      // Substitua por sua lógica real para verificar usuário premium
       return false
+    },
+    maxQuestions() {
+      return this.isUserPremium ? Infinity : LIMIT_FREE_QUESTION
+    },
+    transformStepGrid() {
+      return this.questions.length > 5
+    },
+    allQuizzes() {
+      return this.quizStore?.quizzes || []
+    },
+    myQuizzes() {
+      return this.allQuizzes.filter(item => item.userCreate === this.currentUser)
+    },
+    lastQuiz() {
+      // Retorna o último quiz do usuário, baseado no ID ou data de criação
+      return this.myQuizzes.length ? this.myQuizzes[this.myQuizzes.length - 1] : null
+    },
+    myOtherQuizzes() {
+      // Retorna todos os quizzes do usuário exceto o último
+      return this.myQuizzes.length > 1
+        ? this.myQuizzes.slice(0, this.myQuizzes.length - 1)
+        : []
+    },
+    otherUsersQuizzes() {
+      // Retorna quizzes de outros usuários
+      return this.allQuizzes.filter(item => item.userCreate !== this.currentUser)
     }
   },
+  async mounted() {
+    this.loadQuizzes()
+  },
   methods: {
-    iniciarCriacaoQuiz() {
+    async loadQuizzes() {
+      await this.quizStore.getQuizzes()
+    },
+    initQuiz() {
       if (!this.quizTitle.trim()) return;
-      this.iniciadoCriacao = true;
+      this.startedCreateQuiz = true;
       this.currentStep = 0;
+
+      // Inicializar o array de questões com base no limite
+      this.questions = [];
+      const initialQuestionsCount = this.isUserPremium ? 1 : LIMIT_FREE_QUESTION;
+
+      for (let i = 0; i < initialQuestionsCount; i++) {
+        this.questions.push({
+          text: "",
+          options: ["", "", "", ""],
+          correctAnswer: null,
+          points: DEFAULT_QUESTION_POINTS // Inicializa com a pontuação padrão
+        });
+      }
     },
     loadQuestions(questions) {
       this.questions = questions
@@ -251,16 +273,29 @@ export default {
     },
     nextStep(questions) {
       if (!this.isCurrentQuestionValid) return;
-      this.loadQuestions(questions)
+      this.loadQuestions(questions);
 
-      if (this.currentStep < 3) {
+      // Verificar se podemos adicionar mais questões
+      if (this.currentStep < this.maxQuestions - 1) {
+        // Se estamos na última questão disponível, pode ser necessário adicionar uma nova
         if (this.currentStep === this.questionsCount - 1) {
           this.questionsCount++;
+
+          // Se o array de questões atual não tem espaço suficiente, adicionar mais uma
+          if (this.questionsCount > this.questions.length) {
+            this.questions.push({
+              text: "",
+              options: ["", "", "", ""],
+              correctAnswer: null,
+              points: DEFAULT_QUESTION_POINTS // Inicializa com a pontuação padrão
+            });
+          }
         }
+
         this.currentStep++;
       }
     },
-    irParaRevisao(questions) {
+    goToReview(questions) {
       if (!this.isCurrentQuestionValid) return;
       this.loadQuestions(questions)
       // Certifique-se de que a questão atual é contada
@@ -274,66 +309,72 @@ export default {
       // Vá para a etapa de revisão
       this.currentStep = this.questionsCount;
     },
-    voltarParaUltimaQuestao() {
+    backLastQuestion() {
       this.currentStep = this.questionsCount - 1;
     },
-    salvarQuiz() {
+    saveQuiz() {
       const quiz = {
         title: this.quizTitle,
-        questions: this.questions.slice(0, this.questionsCount)
+        questions: this.questions.slice(0, this.questionsCount),
+        userCreate: this.currentUser
       };
 
-      console.log("Quiz salvo:", quiz);
-      // Aqui você pode implementar a lógica de salvar no banco de dados
-      // ou disparar uma ação para salvar no Vuex/Pinia
-
-      // Exemplo: this.$store.dispatch('saveQuiz', quiz);
+      this.quizStore.saveQuiz(quiz)
 
       // Reiniciar o formulário após salvar
       this.resetForm();
+      this.loadQuizzes()
     },
     resetForm() {
-      this.iniciadoCriacao = false;
+      this.startedCreateQuiz = false;
       this.quizTitle = "";
       this.currentStep = 0;
       this.questionsCount = 1;
-      this.questions = this.questions.map(() => ({
+      this.questions = [{
         text: "",
         options: ["", "", "", ""],
-        correctAnswer: null
-      }));
+        correctAnswer: null,
+        points: DEFAULT_QUESTION_POINTS // Inicializa com a pontuação padrão
+      }];
+    },
+    sumQuizPoints(quiz) {
+      // Calcula a soma dos pontos de todas as questões do quiz
+      return quiz.questions.reduce((sum, question) => sum + (question.points || DEFAULT_QUESTION_POINTS), 0)
+    },
+    viewQuiz(quiz) {
+      this.selectedQuiz = quiz
+      // Aqui você pode implementar a navegação para a tela de detalhes do quiz
+      console.log("Visualizando quiz:", quiz)
+    },
+    playQuiz(quiz) {
+      // Aqui você pode implementar a navegação para a tela de jogar o quiz
+      console.log("Jogando quiz:", quiz)
+    },
+    editQuiz(quiz) {
+      // Implementar a lógica para editar
     }
   }
 };
 </script>
 
-<style>
-.step-content {
-  padding: 20px;
-  border: 1px solid #eee;
-  border-radius: 5px;
-  margin-top: 20px;
+<style scoped>
+.quiz-card {
+  transition: transform 0.2s, box-shadow 0.2s;
+  border: 1px solid #eaeaea;
 }
 
-.questao-container, .revisao-container {
-  max-width: 800px;
-  margin: 0 auto;
+.quiz-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-.alternativas-container {
-  margin-top: 20px;
-  padding: 15px;
-  background-color: #f8f9fa;
-  border-radius: 5px;
+.last-quiz .quiz-card {
+  border-left: 4px solid #4CAF50;
 }
 
-.option-number {
-  font-weight: bold;
-  width: 30px;
-}
-
-.accordion-button:not(.collapsed) {
-  background-color: #e7f1ff;
-  color: #0c63e4;
+.quizzes-section h3 {
+  border-bottom: 2px solid #f1f1f1;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
 }
 </style>

@@ -69,7 +69,6 @@ export const useUserStore = defineStore("userStore", {
     async getUserById(id) {
         try {
             const res = await $http.get(`/users/${id}`);
-            console.log('getUserById', res);
             return res.data;
         } catch (e) {
             console.error(e);
