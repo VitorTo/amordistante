@@ -10,7 +10,7 @@
   </button>
   <badge-premium v-else>
     <button
-      class="btn btn-primary disabled"
+      class="w-100 btn btn-primary disabled"
     >
       <i class="fas fa-plus"></i>
       <span class="ms-2">Adicionar questão</span>
