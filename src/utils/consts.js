@@ -1,0 +1,1 @@
+export const LIMIT_FREE_QUESTION = 3

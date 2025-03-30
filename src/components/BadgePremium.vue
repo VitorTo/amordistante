@@ -5,7 +5,8 @@
 </template>
 
 <script>
+import { ElBadge } from 'element-plus';
 export default {
-
+  components: { ElBadge }
 }
 </script>
