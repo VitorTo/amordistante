@@ -13,6 +13,7 @@
           v-model="questionsLocal[currentStep].text"
           type="textarea"
           placeholder="Digite sua pergunta aqui"
+          @keydown.enter="focusNextInput($event, 'option-0')"
         />
       </div>
       <div class="alternativas-container">
@@ -26,6 +27,8 @@
             v-model="questionsLocal[currentStep].options[index]"
             placeholder="Digite uma alternativa"
             class="flex-grow-1 me-2"
+            :id="`option-${index}`"
+            @keydown.enter="focusNextInput($event, index < 3 ? `option-${index+1}` : null)"
           />
           <el-radio
             class="radio-color-success"
@@ -154,6 +157,19 @@ export default {
     this.questionsLocal = [...this.questions]
   },
   methods: {
+    focusNextInput(event, nextInputId) {
+      event.preventDefault();
+
+      if (nextInputId) {
+        setTimeout(() => {
+          const nextInput = document.getElementById(nextInputId);
+          if (nextInput) nextInput.focus();
+        }, 10);
+      } else {
+
+        event.target.blur();
+      }
+    },
     handlePrevStep() {
       this.showInfo = true
       this.$emit('prev-step');

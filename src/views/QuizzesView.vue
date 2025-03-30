@@ -99,7 +99,7 @@ export default {
     },
     isUserPremium() {
       // Substitua por sua lógica real para verificar usuário premium
-      return true
+      return false
     },
     maxQuestions() {
       return this.isUserPremium ? Infinity : LIMIT_FREE_QUESTION
