@@ -1,35 +1,104 @@
-@import './base.css';
+:root {
+    /* Sua paleta personalizada */
+    --primary-color:    #FF6B81;
+    --primary-color-2: #c75f96;
+    --primary-hover-color:    #ff6b81c0;
+    
+    --secondary-color:  #A29BFE;
+    --secondary-hover-color:  #a29bfec7;
+    
+    --success-color:    #67C23A;
+    --light-color:      #F5F5F5;
+    --white-color: #F5F5F5;
+    
+    --dark-color:       #2C3E50;
+    
+    --bs-black:         var(--dark-color);
+    --bs-white:         var(--light-color);
 
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  font-weight: normal;
+    /* (background e text) */
+    --bs-body-bg:       var(--light-color);
+    --bs-body-color:    var(--dark-color);
+    
+    --border-radius: 1rem;
+    --avatar-profile-size: 120px;
+    --cover-profile-height: 150px;
 }
 
-a,
-.green {
-  text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
-  transition: 0.4s;
-  padding: 3px;
+body {
+    background-color: var(--white-color);
 }
 
-@media (hover: hover) {
-  a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
-  }
+.limit-text {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
 }
 
-@media (min-width: 1024px) {
-  body {
-    display: flex;
-    place-items: center;
-  }
+.limit-text-line-2 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
 
-  #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
-  }
+.mx--1 {
+margin: 0 -1rem;
+}
+
+.me--1 {
+margin-right: -1rem;
+}
+
+/*
+NORMAL:
+Primária: 💖 Rosa Coral (#FF6B81) – Transmite amor, conexão e calor.
+Secundária: 💜 Lilás Suave (#A29BFE) – Adiciona um tom lúdico e amigável.
+Neutra Clara: 🤍 Cinza Gelo (#F5F5F5) – Mantém a interface limpa e moderna.
+Neutra Escura: 🌑 Grafite (#2C3E50) – Dá contraste e sofisticação.
+Destaque: 🌟 Dourado Pastel (#FFD700) – Para pequenos detalhes e realces.
+
+MODO ESCURO:
+Fundo: Azul Noturno (#1B263B)
+Texto: Branco Suave (#EAEAEA)
+Destaques: Tons de Rosa Coral e Lilás
+*/
+
+
+
+/* PERSONALIZED STEP */
+.el-step__main .el-step__description {
+    margin-top: 0.25rem;
+}
+.el-step__main .el-step__description.is-process,
+.el-step__head.is-process .el-step__icon.is-text {
+    color: var(--primary-color);
+}
+
+/* PERSONALIZED ELEMENT PLUS */
+.radio-color-success.el-radio.is-checked .el-radio__inner {
+    background: var(--success-color);
+    border-color: var(--success-color);
+}
+.radio-color-success.el-radio.is-checked .el-radio__label {
+    color: var(--success-color);
+}
+
+.btn-plus-premium .el-badge__content.is-fixed {
+    position: absolute;
+    right: calc(1px + var(--el-badge-size) / 2);
+    top: 0px;
+    transform: translateY(-50%) translateX(50%);
+    z-index: var(--el-index-normal);
+}
+
+.el-input .el-input__wrapper,
+.el-textarea .el-textarea__inner {
+  transition: box-shadow 0.3s ease;
+}
+
+.el-input .el-input__wrapper.is-focus,
+.el-textarea .el-textarea__inner.is-focus {
+  box-shadow: 0 0 0 1px var(--primary-color) inset;
 }
