@@ -1,4 +1,4 @@
-import $http from "@/plugins/axios";
+import { $http } from "@/plugins/axios";
 import { formatMonthDayYear } from "@/utils/index.js";
 import { defineStore } from "pinia";
 
@@ -23,7 +23,9 @@ export const useUserStore = defineStore("userStore", {
     async getProfile(id) {
         try {
             this.isLoadingProfileInfos = true
-            const res = await $http.get(`/profile/${id}`);
+            // const res = await $http.get(`/profile/${id}`);
+            const res = await $http.get(`/api/profiles/me`);
+						console.log(res);
             setTimeout(() => {}, 5000)
 
             if(res.data) {
