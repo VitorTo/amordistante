@@ -4,19 +4,28 @@
       "id": "1",
       "profileId": "1",
       "name": "Vitor Gabriel",
-      "email": "vitor.gabriel@123.com"
+      "email": "vitor.gabriel@123.com",
+      "password": "senha123"
     },
     {
       "id": "2",
       "profileId": "1",
       "name": "Maria Cristina",
-      "email": "maria.cristina@123.com"
+      "email": "maria.cristina@123.com",
+      "password": "senha123"
     },
     {
       "id": "3",
       "profileId": "2",
       "name": "Teste Cristina",
-      "email": "teste.cristina@123.com"
+      "email": "teste.cristina@123.com",
+      "password": "senha123"
+    },
+    {
+      "id": 1,
+      "name": "Usuário Teste",
+      "email": "teste@email.com",
+      "password": "senha123"
     }
   ],
   "profile": [

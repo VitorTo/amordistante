@@ -1,4 +1,4 @@
-import $http from "@/http";
+import $http from "@/plugins/axios";
 import { defineStore } from "pinia";
 
 export const useQuizStore = defineStore("quizStore", {

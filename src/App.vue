@@ -1,4 +1,33 @@
+<template>
+  <header class="nav-menu">
+      <nav class="d-flex gap-3">
+        <RouterLink
+          v-for="(item, index) in items"
+          :key="index"
+          class="item-menu"
+          :class="item.active ? 'active' : ''"
+          :to="item.path"
+          @click="setActive(item)"
+        >
+          <i :class="item.icon"></i>
+          <span>{{ item.name }}</span>
+        </RouterLink>
+      </nav>
+  </header>
+  <main class="main-content" >
+    <RouterView />
+  </main>
+</template>
+
+<script setup>
+import { useConfigProvides } from '@/provides/index';
+
+useConfigProvides();
+
+</script>
+
 <script>
+
 export default {
   data() {
     return {
@@ -44,27 +73,6 @@ export default {
   }
 }
 </script>
-
-<template>
-  <header class="nav-menu">
-      <nav class="d-flex gap-3">
-        <RouterLink
-          v-for="(item, index) in items"
-          :key="index"
-          class="item-menu"
-          :class="item.active ? 'active' : ''"
-          :to="item.path"
-          @click="setActive(item)"
-        >
-          <i :class="item.icon"></i>
-          <span>{{ item.name }}</span>
-        </RouterLink>
-      </nav>
-  </header>
-  <main class="main-content" >
-    <RouterView />
-  </main>
-</template>
 
 <style scoped>
 

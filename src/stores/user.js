@@ -1,4 +1,4 @@
-import $http from "@/http";
+import $http from "@/plugins/axios";
 import { formatMonthDayYear } from "@/utils/index.js";
 import { defineStore } from "pinia";
 
@@ -12,7 +12,13 @@ export const useUserStore = defineStore("userStore", {
     milestoneDate: "",
     milestoneText: "",
     timeline: [],
+    user: null,
+    isAuthenticated: false,
   }),
+  getters: {
+    getUserInfo: (state) => state.user,
+    isLoggedIn: (state) => state.isAuthenticated,
+  },
   actions: {
     async getProfile(id) {
         try {
